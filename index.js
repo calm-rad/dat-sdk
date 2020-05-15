@@ -11,9 +11,9 @@ const RAM = require('random-access-memory')
 const HypercoreProtocol = require('hypercore-protocol')
 
 const datDNS = require('dat-dns')
-const makeHyperdrive = require('hyperdrive')
+const hyperdrive = require('hyperdrive')
 const Corestore = require('corestore')
-const makeHypercore = require('hypercore')
+const hypercore = require('hypercore')
 const makeHypercorePromise = require('@geut/hypercore-promise')
 const makeHyperdrivePromise = require('@geut/hyperdrive-promise')
 
@@ -142,7 +142,7 @@ async function SDK ({
       driveStorage = corestore
     }
 
-    const drive = makeHyperdrive(driveStorage, key, opts)
+    const drive = hyperdrive(driveStorage, key, opts)
     const wrappedDrive = makeHyperdrivePromise(drive)
 
     if (driveStorage !== corestore) {
@@ -242,7 +242,7 @@ async function SDK ({
         key = publicKey
         opts.secretKey = secretKey
       }
-      core = makeHypercore(coreStorage, key, opts)
+      core = hypercore(coreStorage, key, opts)
 
       trackMemoryCore(core)
     } else {
