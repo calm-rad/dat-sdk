@@ -120,9 +120,8 @@ async function SDK ({
     let key = null
 
     try {
+      // Get key buffers from key or url
       key = DatEncoding.decode(nameOrKey)
-      // Normalize keys to be hex strings of the key instead of dat URLs
-      nameOrKey = key.toString('hex')
     } catch (e) {
       // Probably isn't a `dat://` URL, so it must be a name
     }
@@ -213,9 +212,8 @@ async function SDK ({
     let key = null
 
     try {
+      // Get key buffers from key or url
       key = DatEncoding.decode(nameOrKey)
-      // Normalize keys to be hex strings of the key instead of dat URLs
-      nameOrKey = key.toString('hex')
     } catch (e) {
       // Probably isn't a `dat://` URL, so it must be a name
     }
