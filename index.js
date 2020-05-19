@@ -17,9 +17,7 @@ const makeHypercore = require('hypercore')
 const makeHypercorePromise = require('@geut/hypercore-promise')
 const makeHyperdrivePromise = require('@geut/hyperdrive-promise')
 
-const DEFAULT_SWARM_OPTS = {
-  extensions: []
-}
+const DEFAULT_SWARM_OPTS = {}
 const DEFAULT_DRIVE_OPTS = {
   sparse: true,
   persist: true
@@ -43,7 +41,8 @@ async function SDK ({
   storage,
   corestore,
   applicationName = DEFAULT_APPLICATION_NAME,
-  swarmOpts,
+  identityName = DEFAULT_APPLICATION_NAME,
+  swarmOpts = DEFAULT_SWARM_OPTS,
   driveOpts,
   coreOpts,
   dnsOpts,
@@ -69,10 +68,17 @@ async function SDK ({
 
   // I think this is used to create a persisted identity?
   // Needs to be created before the swarm so that it can be passed in
-  const noiseSeed = await deriveSecret(applicationName, 'replication-keypair')
-  const keyPair = HypercoreProtocol.keyPair(noiseSeed)
+  if (!swarmOpts.keyPair) {
+    const noiseSeed = await deriveSecret(applicationName, 'replication-keypair')
+    const keyPair = HypercoreProtocol.keyPair(noiseSeed)
+    swarmOpts.keyPair = keyPair
+  }
+  if (!swarmOpts.id) {
+    const swarmId = await deriveSecret(identityName, 'swarm-id')
+    swarmOpts.id = swarmId
+  }
 
-  const swarm = new SwarmNetworker(corestore, Object.assign({ keyPair }, DEFAULT_SWARM_OPTS, swarmOpts))
+  const swarm = new SwarmNetworker(corestore, swarmOpts)
   const dns = datDNS(Object.assign({}, DEFAULT_DNS_OPTS, dnsOpts))
 
   return {
