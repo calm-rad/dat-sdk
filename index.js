@@ -214,7 +214,7 @@ async function SDK ({
   function Hypercore (nameOrKey, opts) {
     if (!nameOrKey) throw new Error('Must give a name or key in the constructor')
 
-    opts = Object.assign({}, DEFAULT_CORE_OPTS, driveOpts, opts)
+    opts = Object.assign({}, DEFAULT_CORE_OPTS, coreOpts, opts)
 
     let key = null
 
